@@ -1,0 +1,15 @@
+{
+  "entrypoint": "minestom.EntryPoint",
+  "name": "LuaMinestom",
+  "codeModifiers": [
+  ],
+  "dependencies": [
+  ],
+  "externalDependencies": {
+    "repositories": [
+    ],
+    "artifacts": [
+      "org.luaj:luaj-jse:3.0.1"
+    ]
+  }
+}
