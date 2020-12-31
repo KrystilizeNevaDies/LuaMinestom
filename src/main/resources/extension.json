@@ -1,6 +1,6 @@
 {
-  "entrypoint": "minestom.EntryPoint",
-  "name": "LuaMinestom",
+  "entrypoint": "lua.LuaSupport",
+  "name": "LuaSupport",
   "codeModifiers": [
   ],
   "dependencies": [
