@@ -7,15 +7,13 @@ import script.plugin.language.LanguageNumber;
 
 public class LuaNumber extends LuaObject implements LanguageNumber {
 	
-	LuaValue value = LuaValue.valueOf(0);
-	
-	public LuaNumber(LanguageAPI langAPI) {
+	public LuaNumber(Number num, LanguageAPI langAPI) {
 		super(langAPI);
+		value = LuaValue.valueOf(num.doubleValue());
 	}
 
 	@Override
 	public Number getJavaValue() {
-		// TODO Auto-generated method stub
-		return null;
+		return value.todouble();
 	}
 }
