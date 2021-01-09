@@ -2,6 +2,7 @@ package lua.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +19,8 @@ import script.plugin.language.LanguageObject;
 public class LuaFunction extends LuaObject implements LanguageFunction {
 
 	Function<ArrayList<LanguageObject>, ArrayList<LanguageObject>> func;
+	
+	Consumer<String> log = LuaSupport::log;
 	
 	public LuaFunction(LanguageAPI langAPI, @NotNull Function<ArrayList<LanguageObject>, ArrayList<LanguageObject>> func) {
 		super(langAPI, LuaValue.NIL);
@@ -45,7 +48,7 @@ public class LuaFunction extends LuaObject implements LanguageFunction {
 			ArrayList<LanguageObject> returnObjects = new ArrayList<LanguageObject>();
 			
 			for (int i = 1; i < returns.narg() + 1; i++) {
-				returnObjects.add(LuaSupport.get().luaToJavaValue(returns.arg(i)));
+				returnObjects.add(LuaSupport.get().luaToAPIValue(returns.arg(i)));
 			}
 			
 			return returnObjects;
@@ -63,20 +66,29 @@ public class LuaFunction extends LuaObject implements LanguageFunction {
 			
 			ArrayList<LanguageObject> list = new ArrayList<LanguageObject>();
 			
+			LuaSupport api = ((LuaSupport) getAPI());
+			
+			log.accept("Running java function with these lua args: ");
+			
 			for (int i = 1; i < varargs.narg() + 1; i++) {
 				LuaValue arg = varargs.arg(i);
-				LuaSupport api = ((LuaSupport) getAPI());
 				
-				list.add(api.luaToJavaValue(arg));
+				log.accept(i + "|" + arg.toString());
+				list.add(api.luaToAPIValue(arg));
 			}
 			
 			List<LanguageObject> returnArgs = callFunction(list);
+			
+			
+			log.accept("Got these return values: ");
 			
 			LuaValue[] valueArray = new LuaValue[returnArgs.size()];
 			
 			for (int i = 0; i < returnArgs.size(); i++) {
 				
 				LuaObject object = ((LuaObject) returnArgs.get(i));
+				
+				log.accept("");
 				
 				if (object instanceof LuaJavaBinding)
 				ScriptSupportAPI.addChildren((LuaJavaBinding) object, getAPI());

@@ -68,7 +68,7 @@ public class LuaSupport extends Extension implements LanguageAPI {
 
 	@Override
 	public LanguageObject getGlobal(Plugin plugin, String str) {
-		return luaToJavaValue(pluginGlobals.get(plugin).get(str));
+		return luaToAPIValue(pluginGlobals.get(plugin).get(str));
 	}
 
 	@Override
@@ -110,7 +110,7 @@ public class LuaSupport extends Extension implements LanguageAPI {
 		return new LuaString(this, str);
 	}
 	
-	public LanguageObject luaToJavaValue(LuaValue value) {
+	public LanguageObject luaToAPIValue(LuaValue value) {
 		if (value.isnumber()) {return numberOf(value.todouble());};
 		if (value.isstring()) {return stringOf(value.tojstring());};
 		if (value.isboolean()) {return booleanOf(value.toboolean());};
@@ -121,7 +121,7 @@ public class LuaSupport extends Extension implements LanguageAPI {
 	
 	@Override
 	public Object getJavaValue(LanguageObject object) {
-		if (object instanceof LuaValue) return getJavaValue(luaToJavaValue((LuaValue) object));
+		if (object instanceof LuaValue) return getJavaValue(luaToAPIValue((LuaValue) object));
 		if (object instanceof LanguageNumber) return ((LanguageNumber) object).getJavaValue();
 		if (object instanceof LanguageString) return ((LanguageString) object).getJavaValue();
 		if (object instanceof LanguageBoolean) return ((LanguageBoolean) object).getJavaValue();
@@ -135,7 +135,7 @@ public class LuaSupport extends Extension implements LanguageAPI {
 		return new LuaFunction(this, arg);
 	}
 	
-	public void log(String str) {
+	public static void log(String str) {
 		if (debug) System.out.println("DEBUG: " + str);
 	}
 }
